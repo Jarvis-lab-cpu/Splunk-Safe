@@ -2,6 +2,8 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+
 from app.api.routes import router
 from app.database import Base, SessionLocal, engine
 from app.seed import seed
@@ -18,7 +20,17 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="SplunkSafe API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(
+    title="SplunkSafe API",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
+
 
 app.add_middleware(
     CORSMiddleware,
