@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    expose:
+      - "8000"
+    volumes:
+      - splunk_db:/app
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  splunk_db:
